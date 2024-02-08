@@ -45,8 +45,8 @@ def build_model(n_inputs, hidden_layers, n_output, activation='elu', activation_
 	'''
 	model = Sequential()
 	model.add(InputLayer(input_shape=(n_inputs,)))
-	for n_hidden in hidden_layers:
-		model.add(Dense(n_hidden, use_bias=True, name='Hidden', activation=activation))
+	for i, n_hidden in enumerate(hidden_layers):
+		model.add(Dense(n_hidden, use_bias=True, name='Hidden_%d'%i, activation=activation))
 	model.add(Dense(n_output, use_bias=True, name='Output', activation=activation_output))
 	
 	# Optimizer
@@ -65,7 +65,7 @@ def args2string(args):
 	
 	:param args: Command line arguments
 	'''
-	return "exp_%02d_hidden_%02d"%(args.exp, args.hidden)
+	return "exp_%02d_hidden_"%(args.exp) + '_'.join([str(h) for h in args.hidden])
 	
 	
 ########################################################
