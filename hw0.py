@@ -77,6 +77,9 @@ def execute_exp(args):
 	##############################
 	# Run the experiment
 
+	# Describe arguments
+	argstring = args2string(args)
+	print("EXPERIMENT: %s"%argstring)
 
 	# Initialize WANDB
 	wandb.init(project=args.project, name='xor_%d'%(args.exp), notes=argstring, config=vars(args))
@@ -95,10 +98,6 @@ def execute_exp(args):
 	cbs = []
 
 	#early_stopping_cb = # TODO
-	
-	# Describe arguments
-	argstring = args2string(args)
-	print("EXPERIMENT: %s"%argstring)
 
 	wandb.log({'hostname': socket.gethostname()})
 
