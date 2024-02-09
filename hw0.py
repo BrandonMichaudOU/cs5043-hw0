@@ -82,7 +82,7 @@ def execute_exp(args):
 	print("EXPERIMENT: %s"%argstring)
 
 	# Initialize WANDB
-	wandb.init(project=args.project, name='xor_%d'%(args.exp), notes=argstring, config=vars(args))
+	wandb.init(project=args.project, name='hw0_%d'%(args.exp), notes=argstring, config=vars(args))
 
 	# Load training set
 	fp = open("hw0_dataset.pkl", "rb")
