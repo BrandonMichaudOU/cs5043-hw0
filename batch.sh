@@ -21,7 +21,7 @@
 conda activate tf
 
 # Change this line to start an instance of your experiment
-python hw0.py --project 'hw0' --epochs 1000 --exp 0 -vv
+python hw0.py --project 'hw0' --hidden 512 32 --epochs 1000 --exp 0 -vv
 
 
 # parser.add_argument('--lrate', type=float, default=0.001, help='learning rate')
