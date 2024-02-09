@@ -1,9 +1,7 @@
 '''
-Deep Learning Demo: XOR
+Advanced Machine Learning HW0
 
-Command line version
-
-Andrew H. Fagg (andrewhfagg@gmail.com)
+Brandon Michaud
 '''
 
 import tensorflow as tf

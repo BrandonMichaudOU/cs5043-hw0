@@ -1,21 +1,6 @@
 #!/bin/bash
-# Andrew H. Fagg
+# Brandon Michaud
 #
-# Example with an array of experiments
-#  The --array line says that we will execute 4 experiments (numbered 0,1,2,3).
-#   You can specify ranges or comma-separated lists on this line
-#  For each experiment, the SLURM_ARRAY_TASK_ID will be set to the experiment number
-#   In this case, this ID is used to set the name of the stdout/stderr file names
-#   and is passed as an argument to the python program
-#
-#
-# When you use this batch file:
-#  Change the email address to yours! (I don't want email about your experiments)
-#  Change the chdir line to match the location of where your code is located
-#
-# Reasonable partitions: debug_5min, debug_30min, normal
-#
-
 #SBATCH --partition=debug_5min
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task 16
@@ -23,11 +8,11 @@
 # The %j is translated into the job number
 #SBATCH --output=results/xor_%j_stdout.txt
 #SBATCH --error=results/xor_%j_stderr.txt
-#SBATCH --time=00:02:00
-#SBATCH --job-name=xor_test
+#SBATCH --time=00:05:00
+#SBATCH --job-name=hw0
 #SBATCH --mail-user=brandondmichaud@ou.edu
 #SBATCH --mail-type=ALL
-#SBATCH --chdir=/home/cs504319/tmp
+#SBATCH --chdir=/home/cs504319/cs5043-hw0
 #
 #################################################
 # Do not change this line unless you have your own python/tensorflow/keras set up
@@ -36,6 +21,19 @@
 conda activate tf
 
 # Change this line to start an instance of your experiment
-python xor_base.py --epochs 1000 --exp 0 -vv
+python hw0.py --project 'hw0' --epochs 1000 --exp 0 -vv
 
 
+# parser.add_argument('--lrate', type=float, default=0.001, help='learning rate')
+# parser.add_argument('--nonlinearity', type=str, default='sigmoid', help='activation function')
+# parser.add_argument('--nonlinearity_output', type=str, default='sigmoid', help='activation function in output layer')
+# parser.add_argument('--project', type=str, default='HW0', help='Name for WandB')
+# parser.add_argument('--label', type=str, default='None', help='Used for organization with WandB')
+# parser.add_argument('--exp', type=int, default=0, help='Experiment number')
+# parser.add_argument('--hidden', nargs='+', type=int, default=[5], help='Number of hidden units per layer (sequence of ints)')
+# parser.add_argument('--epochs', type=int, default=100, help='Number of training epochs')
+# parser.add_argument('--cpus-per-task', type=int, default=None, help='Number of threads to use')
+# parser.add_argument('--nogo', action='store_true', help='Do not execute the experiment')
+# parser.add_argument('--gpu', action='store_true', help='Use a GPU')
+# parser.add_argument('--aggregate', action='store_true', help='Aggregate the results instead of training')
+# parser.add_argument('--verbose', '-v', action='count', default=0, help='Verbosity level')
