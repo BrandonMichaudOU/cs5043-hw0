@@ -21,7 +21,7 @@
 conda activate tf
 
 # Change this line to start an instance of your experiment
-python hw0.py --project 'hw0' --lrate 0.005 --nonlinearity 'tanh' --nonlinearity_output 'tanh' --hidden 11 5 --epochs 1000 --exp 8 -vv
+python hw0.py --project 'hw0' --lrate 0.005 --nonlinearity 'relu' --nonlinearity_output 'tanh' --hidden 11 5 --epochs 1000 --exp 8 -vv
 
 
 # parser.add_argument('--lrate', type=float, default=0.001, help='learning rate')
