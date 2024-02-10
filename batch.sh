@@ -1,7 +1,7 @@
 #!/bin/bash
 # Brandon Michaud
 #
-#SBATCH --partition=debug_5min
+#SBATCH --partition=debug_30min
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task 16
 #SBATCH --mem=1G
