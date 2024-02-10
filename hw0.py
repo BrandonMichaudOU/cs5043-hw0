@@ -19,7 +19,7 @@ import pickle
 import wandb
 
 # Tensorflow 2.x way of doing things
-from tensorflow.keras.layers import InputLayer, Dense, BatchNormalization
+from tensorflow.keras.layers import InputLayer, Dense
 from tensorflow.keras.models import Sequential
 
 #################################################################
@@ -43,10 +43,8 @@ def build_model(n_inputs, hidden_layers, n_output, activation='elu', activation_
 	'''
 	model = Sequential()
 	model.add(InputLayer(input_shape=(n_inputs,)))
-	model.add(BatchNormalization())
 	for i, n_hidden in enumerate(hidden_layers):
 		model.add(Dense(n_hidden, use_bias=True, name='Hidden_%d'%i, activation=activation))
-		model.add(BatchNormalization())
 	model.add(Dense(n_output, use_bias=True, name='Output', activation=activation_output))
 	
 	# Optimizer
