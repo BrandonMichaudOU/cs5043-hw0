@@ -8,7 +8,7 @@
 # The %j is translated into the job number
 #SBATCH --output=results/xor_%j_stdout.txt
 #SBATCH --error=results/xor_%j_stderr.txt
-#SBATCH --time=00:05:00
+#SBATCH --time=00:15:00
 #SBATCH --job-name=hw0
 #SBATCH --mail-user=brandondmichaud@ou.edu
 #SBATCH --mail-type=ALL
