@@ -207,7 +207,7 @@ if __name__ == "__main__":
 	if(n_visible_devices > 0):
 		for device in visible_devices:
 			tf.config.experimental.set_memory_growth(device, True)
-		print('We have %d GPUs\n'%n_physical_devices)
+		print('We have %d GPUs\n'%n_visible_devices)
 	else:
 		print('NO GPU')
 
