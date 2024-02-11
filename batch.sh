@@ -2,7 +2,7 @@
 # Brandon Michaud
 #
 # disc_dual_a100_students
-#SBATCH --partition=debug_5min
+#SBATCH --partition=normal
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task 16
 #SBATCH --mem=1G
