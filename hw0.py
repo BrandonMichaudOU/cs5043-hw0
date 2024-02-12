@@ -22,25 +22,25 @@ import wandb
 from tensorflow.keras.layers import InputLayer, Dense
 from tensorflow.keras.models import Sequential
 
-#################################################################
 # Default plotting parameters
 FONTSIZE = 18
 plt.rcParams['figure.figsize'] = (10, 6)
 plt.rcParams['font.size'] = FONTSIZE
 
-#################################################################
 def build_model(n_inputs, hidden_layers, n_output, activation='elu', activation_output='elu', lrate=0.001):
 	'''
-	Construct a network with one hidden layer
+	Construct a network with given architecture
 	- Adam optimizer
 	- MSE loss
 	
 	:param n_inputs: Number of input dimensions
-	:param n_hidden: Number of units in the hidden layer
+	:param hidden_layers: Number of neurons in each hidden layer
 	:param n_output: Number of ouptut dimensions
-	:param activation: Activation function to be used for hidden and output units
+	:param activation: Activation function to be used for hidden units
+	:param activation_output: Activation function to be used for output units
 	:param lrate: Learning rate for Adam Optimizer
 	'''
+	# Build dense sequential model
 	model = Sequential()
 	model.add(InputLayer(input_shape=(n_inputs,)))
 	for i, n_hidden in enumerate(hidden_layers):
@@ -65,47 +65,39 @@ def args2string(args):
 	'''
 	return "exp_%02d_hidden_"%(args.exp) + '_'.join([str(h) for h in args.hidden])
 	
-	
-########################################################
 def execute_exp(args):
 	'''
 	Execute a single instance of an experiment.  The details are specified in the args object
 	
 	:param args: Command line arguments
 	'''
-
-	##############################
-	# Run the experiment
-
 	# Describe arguments
 	argstring = args2string(args)
 	print("EXPERIMENT: %s"%argstring)
 
-	# Initialize WANDB
+	# Initialize WandB
 	wandb.init(project=args.project, name='hw0_%d'%(args.exp), notes=argstring, config=vars(args))
 
 	# Load training set
 	fp = open("hw0_dataset.pkl", "rb")
 	training_set = pickle.load(fp)
 	fp.close()
-
 	ins = training_set['ins']
 	outs = training_set['outs']
 	
+	# Build the model
 	model = build_model(ins.shape[1], args.hidden, outs.shape[1], activation=args.nonlinearity, activation_output=args.nonlinearity_output, lrate=args.lrate)
 
 	# Callbacks
 	cbs = []
 
-	#early_stopping_cb = # TODO
-
+	# Set up WandB to automatically update information
 	wandb.log({'hostname': socket.gethostname()})
-
 	cbs.append(wandb.keras.WandbMetricsLogger()) 
 	
 	# Only execute if we are 'going'
 	if not args.nogo:
-		# Training
+		# Train model
 		print("Training...")        
 		history = model.fit(x=ins, y=outs, epochs=args.epochs, verbose=args.verbose >= 2, callbacks=cbs)
 		print("Done Training")
@@ -127,20 +119,22 @@ def execute_exp(args):
 		}
 		wandb.log(obj)
 
-		# Save the training history
+		# Save the absolute errors
 		with open('errors/hw0_results_%s.pkl'%(argstring), "wb") as fp:
 			pickle.dump(abs_errors, fp)
 
-	# Close WANDB
+	# Close WandB
 	wandb.finish()
 
 
 def aggregate_results():
+	'''
+	Aggregate the absolute errors over all experiments into a histogram
+	'''
 	# Directory containing results files
 	dir = './errors/'
 
-	# File specification (normally bring this in as an argument)
-	#  \d\d matches any 2-digit sequence
+	# File specification
 	file_spec = 'hw0_results_exp_\d\d'
 
 	# Grab the list of matching files
@@ -154,63 +148,31 @@ def aggregate_results():
 				obj = pickle.load(fp)
 				objs.append(obj)
 
+	# Combine errors
 	abs_errors = np.vstack(objs)
+
+	# Create histogram
 	fig = plt.figure()
 	plt.hist(abs_errors, 50)
 	plt.ylabel('Count')
 	plt.xlabel('Absolute error')
 	plt.ylim([0, 50])
 
-	# Initialize WANDB
+	# Initialize WandB
 	wandb.init(project=args.project, name='hw0_aggregate')
 
+	# Log histogram to WandB
 	wandb.log({'hostname': socket.gethostname()})
 	wandb.log({'histogram figure': fig})
 
-	# Close WANDB
+	# Close WandB
 	wandb.finish()
-	
-# def display_learning_curve(fname):
-#     '''
-#     Display the learning curve that is stored in fname
-	
-#     :param fname: Results file to load and dipslay
-	
-#     '''
-	
-#     # Load the history file and display it
-#     fp = #TODO
-#     # TODO
-#     fp.close()
-	
-#     # Display
-#     plt.plot(history['loss'])
-#     plt.ylabel('MSE')
-#     plt.xlabel('epochs')
-
-# def display_learning_curve_set(dir, base):
-#     '''
-#     Plot the learning curves for a set of results
-	
-#     :param base: Directory containing a set of results files
-#     '''
-#     # Find the list of files in the local directory that match base_[\d]+.pkl
-#     files = [f for f in os.listdir(dir) if re.match(r'%s.+.pkl'%(base), f)]
-#     files.sort()
-	
-#     for f in files:
-#         with open("%s/%s"%(dir,f), "rb") as fp:
-#             history = pickle.load(fp)
-#             plt.plot(history['loss'])
-#     plt.ylabel('MSE')
-#     plt.xlabel('epochs')
-#     plt.legend(files)
 	
 def create_parser():
 	'''
 	Create a command line parser for the XOR experiment
 	'''
-	parser = argparse.ArgumentParser(description='XOR Learner')
+	parser = argparse.ArgumentParser(description='HW0')
 	parser.add_argument('--lrate', type=float, default=0.001, help='learning rate')
 	parser.add_argument('--nonlinearity', type=str, default='sigmoid', help='activation function')
 	parser.add_argument('--nonlinearity_output', type=str, default='sigmoid', help='activation function in output layer')
@@ -226,10 +188,6 @@ def create_parser():
 	parser.add_argument('--verbose', '-v', action='count', default=0, help='Verbosity level')
 	return parser
 
-'''
-This next bit of code is executed only if this python file itself is executed
-(if it is imported into another file, then the code below is not executed)
-'''
 if __name__ == "__main__":
 	# Parse the command-line arguments
 	parser = create_parser()
