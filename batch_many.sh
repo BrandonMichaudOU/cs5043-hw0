@@ -13,7 +13,7 @@
 #SBATCH --mail-user=brandondmichaud@ou.edu
 #SBATCH --mail-type=ALL
 #SBATCH --chdir=/home/cs504319/cs5043-hw0
-#SBATCH --array=100-109
+#SBATCH --array=0-9
 #
 #################################################
 # Do not change this line unless you have your own python/tensorflow/keras set up
