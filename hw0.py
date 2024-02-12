@@ -137,7 +137,7 @@ def execute_exp(args):
 
 def aggregate_results():
 	# Directory containing results files
-	dr = './errors/'
+	dir = './errors/'
 
 	# File specification (normally bring this in as an argument)
 	#  \d\d matches any 2-digit sequence
