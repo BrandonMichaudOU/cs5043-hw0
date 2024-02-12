@@ -128,8 +128,44 @@ def execute_exp(args):
 		wandb.log(obj)
 
 		# Save the training history
-		# with open('results/hw0_results_%s.pkl'%(argstring), "wb") as fp:
-		# 	pickle.dump(obj, fp)
+		with open('errors/hw0_results_%s.pkl'%(argstring), "wb") as fp:
+			pickle.dump(abs_errors, fp)
+
+	# Close WANDB
+	wandb.finish()
+
+
+def aggregate_results():
+	# Directory containing results files
+	dr = './errors/'
+
+	# File specification (normally bring this in as an argument)
+	#  \d\d matches any 2-digit sequence
+	file_spec = 'hw0_results_exp_\d\d.pkl'
+
+	# Grab the list of matching files
+	files = [f for f in os.listdir(dir) if re.match(r'%s'%(file_spec), f)]
+
+	# Iterate over the files.  Open each and extract the errors
+	objs = []
+	for f in files:
+		print(f)
+		with open("%s/%s"%(dr,f), "rb") as fp:
+				obj = pickle.load(fp)
+				objs.append(obj)
+
+	abs_errors = np.concatenate(objs)
+	fig = plt.figure()
+	plt.hist(abs_errors, 50)
+	plt.ylabel('Count')
+	plt.xlabel('Absolute error')
+	plt.ylim([0, 50])
+
+	# Initialize WANDB
+	wandb.init(project=args.project, name='hw0_aggregate')
+
+	wandb.log({'hostname': socket.gethostname()})
+	wandb.log({'histogram figure': fig})
 
 	# Close WANDB
 	wandb.finish()
@@ -219,6 +255,6 @@ if __name__ == "__main__":
 
 	# Do the work
 	if args.aggregate:
-		print() # build figures
+		aggregate_results()
 	else:
 		execute_exp(args)
