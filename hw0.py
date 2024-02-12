@@ -150,7 +150,7 @@ def aggregate_results():
 	objs = []
 	for f in files:
 		print(f)
-		with open("%s/%s"%(dr,f), "rb") as fp:
+		with open("%s/%s"%(dir,f), "rb") as fp:
 				obj = pickle.load(fp)
 				objs.append(obj)
 
