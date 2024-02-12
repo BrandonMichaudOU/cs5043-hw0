@@ -1,7 +1,7 @@
 #!/bin/bash
 # Brandon Michaud
 #
-#SBATCH --partition=disc_dual_a100_students
+#SBATCH --partition=debig_5min
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task 16
 #SBATCH --mem=1G
