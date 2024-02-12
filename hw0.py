@@ -154,7 +154,7 @@ def aggregate_results():
 				obj = pickle.load(fp)
 				objs.append(obj)
 
-	abs_errors = np.concatenate(objs)
+	abs_errors = np.vstack(objs)
 	fig = plt.figure()
 	plt.hist(abs_errors, 50)
 	plt.ylabel('Count')
