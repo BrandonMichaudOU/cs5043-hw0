@@ -141,7 +141,7 @@ def aggregate_results():
 
 	# File specification (normally bring this in as an argument)
 	#  \d\d matches any 2-digit sequence
-	file_spec = 'hw0_results_exp_\d\d.pkl'
+	file_spec = 'hw0_results_exp_\d\d'
 
 	# Grab the list of matching files
 	files = [f for f in os.listdir(dir) if re.match(r'%s'%(file_spec), f)]
