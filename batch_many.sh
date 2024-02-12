@@ -6,8 +6,8 @@
 #SBATCH --cpus-per-task 16
 #SBATCH --mem=1G
 # The %j is translated into the job number
-#SBATCH --output=results/xor_%j_stdout.txt
-#SBATCH --error=results/xor_%j_stderr.txt
+#SBATCH --output=results/hw0_%j_stdout.txt
+#SBATCH --error=results/hw0_%j_stderr.txt
 #SBATCH --time=00:02:00
 #SBATCH --job-name=hw0
 #SBATCH --mail-user=brandondmichaud@ou.edu
