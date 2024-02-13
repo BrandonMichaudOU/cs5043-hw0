@@ -5,7 +5,6 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task 16
 #SBATCH --mem=1G
-# The %j is translated into the job number
 #SBATCH --output=results/hw0_%j_stdout.txt
 #SBATCH --error=results/hw0_%j_stderr.txt
 #SBATCH --time=00:02:00
@@ -14,12 +13,8 @@
 #SBATCH --mail-type=ALL
 #SBATCH --chdir=/home/cs504319/cs5043-hw0
 #SBATCH --array=0-9
-#
-#################################################
-# Do not change this line unless you have your own python/tensorflow/keras set up
 
 . /home/fagg/tf_setup.sh
 conda activate tf
 
-# Change this line to start an instance of your experiment
 python hw0.py --project 'hw0' --lrate 0.005 --nonlinearity 'tanh' --nonlinearity_output 'tanh' --hidden 11 5 --epochs 1000 --exp $SLURM_ARRAY_TASK_ID -vv
